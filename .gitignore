@@ -1,0 +1,11 @@
+# Ignore everything
+*
+
+# But not these directories
+!skills/
+!skills/**
+!agents/
+!agents/**
+
+# And not .gitignore itself
+!.gitignore
