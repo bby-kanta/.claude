@@ -6,6 +6,8 @@
 !skills/**
 !agents/
 !agents/**
+!hooks/
+!hooks/**
 
 # And not .gitignore itself
 !.gitignore
