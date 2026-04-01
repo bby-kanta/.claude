@@ -1,0 +1,1 @@
+bby-kantaのグローバルに設定しているclaudeの設定
