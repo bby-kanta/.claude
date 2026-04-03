@@ -1,5 +1,5 @@
 ---
-name: anthropic-dual-review
+name: anthropic-quad-review
 description: code-review、pr-review-toolkit、codex review、codex adversarial-reviewの4つのレビューを同一PRに対して並列実行し、レビュー結果をreview-output/配下にエクスポートするスキル。
 disable-model-invocation: true
 ---
