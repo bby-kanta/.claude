@@ -90,12 +90,11 @@ Devin Review のモデルは **Claude Sonnet 4.5** です。[Cognition のブロ
 
 # まとめ
 
-Devin Review の指摘が鋭い理由は、5つの仕組みが裏で動いているからでした。
+Devin Review の指摘が鋭い理由は、4つの仕組みが裏で動いているからでした。
 
 | Layer | 仕組み | 公式ソース |
 |-------|--------|-----------|
 | 1 | diff + worktree の read-only 探索 | [docs.devin.ai](https://docs.devin.ai/work-with-devin/devin-review) |
 | 2 | CLAUDE.md / .rules 等の自動取り込み | [同上](https://docs.devin.ai/work-with-devin/devin-review) |
 | 3 | Ask Devin セッション（full codebase understanding） | [cognition.ai/blog](https://cognition.ai/blog/devin-review) |
-| 4 | Knowledge（トリガーベース知識想起） | [docs.devin.ai](https://docs.devin.ai/product-guides/knowledge), [docs.devin.ai](https://docs.devin.ai/onboard-devin/knowledge-onboarding) |
-| 5 | DeepWiki + リポジトリインデックス | [docs.devin.ai](https://docs.devin.ai/work-with-devin/deepwiki), [docs.devin.ai](https://docs.devin.ai/work-with-devin/ask-devin) |
+| 4 | DeepWiki + リポジトリインデックス | [docs.devin.ai](https://docs.devin.ai/work-with-devin/deepwiki), [docs.devin.ai](https://docs.devin.ai/work-with-devin/ask-devin) |
