@@ -13,15 +13,17 @@
 
 ## 使ったレビューツール5つ
 
-今回使ったのは以下の5つです。前半4つは Claude Code のサブエージェントとして並列実行し、Devin は GitHub App として別途動かしています。
+前半4つは Claude Code のサブエージェントとして並列実行し、Devin は GitHub App として別途動かしています。記事中では短縮形で表記します。
 
-- Anthropic code-review
-- Anthropic pr-review-toolkit
-- Codex review
-- Codex adversarial-review
-- Devin Review
+| ツール名 | 短縮形 | 提供元 | リンク |
+|---------|--------|--------|--------|
+| code-review | **CR** | Anthropic 公式プラグイン | [Github リポジトリ](https://github.com/anthropics/claude-plugins-official/tree/main/plugins/code-review) |
+| pr-review-toolkit | **PRT** | Anthropic 公式プラグイン | [Github リポジトリ](https://github.com/anthropics/claude-plugins-official/tree/main/plugins/pr-review-toolkit) |
+| Codex review | **CX** | OpenAI Codex プラグイン | [Github リポジトリ](https://github.com/openai/codex-plugin-cc) |
+| Codex adversarial-review | **CXA** | OpenAI Codex プラグイン | [Github リポジトリ](https://github.com/openai/codex-plugin-cc) |
+| Devin Review | **DV** | Cognition (GitHub App) | [公式ドキュメント](https://docs.devin.ai/work-with-devin/devin-review) |
 
-同じ Anthropic 製でも code-review と pr-review-toolkit は全く違う性格のツールですし、Codex review と Codex adversarial-review も内部的な仕組みが違います。Devin Reviewは他のツールとは毛色が違いますが、クラシル社で活用しているので比較のために入れてます。
+同じ Anthropic 製でも CR と PRT は全く違う性格のツールですし、CX と CXA も内部的な仕組みが違います。DV は他のツールとは毛色が違いますが、クラシル社で活用しているので比較のために入れてます。
 
 全てが違う観点で動く以上、違うことを指摘するのは当たり前ですが、並列で動かすことで2点メリットがあります。
 
