@@ -64,6 +64,12 @@ Devinはコードベースをバックグラウンドでインデックス化し
 
 DeepWiki → Ask Devin の接続は明確で、[DeepWikiのドキュメント](https://docs.devin.ai/work-with-devin/deepwiki)に「Ask Devin will use information in the Wiki」と書かれています。Layer 3で見た通り Devin Reviewは Ask Devin セッション経由で動いているので、DeepWikiの情報は間接的にレビューにも効いていると考えられます。
 
+# モデルは Claude Sonnet 4.5
+
+Devin Reviewのモデルは **Claude Sonnet 4.5** です。[Cognitionのブログ](https://cognition.ai/blog/devin-sonnet-4-5-lessons-and-challenges)で公開されています。
+
+ただ、この記事で書いてきた通り、指摘の鋭さはモデル単体の性能というよりは、worktree 探索 → 指示ファイル取り込み → Ask Devin → DeepWiki という4層の仕組みによるところが大きいと思います。同じ Claude Sonnet 4.5 でも、素の diffだけ渡してレビューさせた場合とは出力が全然違うはずです。
+
 # Devin Reviewのメリット・デメリット
 
 4つの仕組みを踏まえた上で、使ってみて感じたメリットとデメリットを整理します。
@@ -78,20 +84,3 @@ DeepWiki → Ask Devin の接続は明確で、[DeepWikiのドキュメント](h
 
 - **スタイルやルール違反は指摘しない**: CLAUDE.md を読み込んでいるはずだが、必ずしも指摘に反映されているわけではない印象。コードの品質やスタイルの問題は指摘してこない。あくまで「バグっぽい問題」を見つける。
 - **false positive もある**: 既存コードのバグを掘り起こすことがあるが、逆に既存の意図的な設計を「問題」として指摘してくるケースもある。本当に問題のこともあるので、デメリットというよりは注意点かもしれない。
-
-# モデルは Claude Sonnet 4.5
-
-Devin Reviewのモデルは **Claude Sonnet 4.5** です。[Cognitionのブログ](https://cognition.ai/blog/devin-sonnet-4-5-lessons-and-challenges)で公開されています。
-
-ただ、この記事で書いてきた通り、指摘の鋭さはモデル単体の性能というよりは、worktree 探索 → 指示ファイル取り込み → Ask Devin → DeepWiki という4層の仕組みによるところが大きいと思います。同じ Claude Sonnet 4.5 でも、素の diffだけ渡してレビューさせた場合とは出力が全然違うはずです。
-
-# まとめ
-
-Devin Reviewの指摘が鋭い理由は、4つの仕組みが裏で動いているからでした。
-
-- diffを起点に必要なファイルを選択的に探索する
-- リポジトリ内の指示ファイルを自動で取り込む
-- Ask Devin セッションでコードベース全体の文脈を理解する
-- リポジトリインデックス + DeepWiki でコードベースの知識を提供する
-
-特にDevin Wiki + Ask Devin の組み合わせが強力で、コードベース全体の文脈を理解した上でレビューしている点が、他のレビューツールと大きく異なる点で、Devin Reviewのストロングポイントだと感じました。
