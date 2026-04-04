@@ -11,7 +11,7 @@ AIのコードレビューツールをいくつか使っているのですが、
 
 ## Layer 1: diff + worktree の選択的探索
 
-分析の起点は PRのdiff です。ただ diffを見るだけではありません。
+分析の起点は PRのdiffです。ただ diffを見るだけではありません。
 
 [公式ドキュメント](https://docs.devin.ai/work-with-devin/devin-review)によると:
 
@@ -19,7 +19,7 @@ AIのコードレビューツールをいくつか使っているのですが、
 
 > The Bug Catcher can execute a limited set of read-only operations scoped to the worktree directory
 
-一時的な git worktree を作成し、その中で read-onlyのbash コマンドを実行して、diff外のファイルも選択的に参照します。許可されているコマンドは `ls`, `cat`, `pwd`, `file`, `head`, `tail`, `wc`, `find`, `tree`, `stat`, `du` と、検索系の `grep` です。
+一時的な git worktree を作成し、その中で read-onlyのbashコマンドを実行して、diff外のファイルも選択的に参照します。許可されているコマンドは `ls`, `cat`, `pwd`, `file`, `head`, `tail`, `wc`, `find`, `tree`, `stat`, `du` と、検索系の `grep` です。
 
 リポジトリ全体をアップロードするわけではなく、diffを起点にして必要なファイルを読みに行く仕組みです。
 
