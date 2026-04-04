@@ -13,13 +13,11 @@
 
 今回使ったのは以下の5つです。前半4つは Claude Code のサブエージェントとして並列実行し、Devin は GitHub App として別途動かしています。
 
-| レビュアー | 提供元 | ざっくりした特徴 |
-|-----------|--------|---------------|
-| **code-review** | Anthropic公式プラグイン | 精密射撃型。CLAUDE.md のルール違反を正確に検出する |
-| **pr-review-toolkit** | Anthropic公式プラグイン | 広域探索型。テスト・セキュリティ・設計まで幅広く見る |
-| **Codex review** | OpenAI Codex プラグイン | 文脈探索型。diff の外まで追いかけて下流への影響を調べる |
-| **Codex adversarial-review** | OpenAI Codex プラグイン | 攻撃者視点型。リプレイ攻撃や権限の抜け穴を探す |
-| **Devin** | Cognition (GitHub App) | 継承パターン網羅型。オーバーライド漏れに強い |
+- Anthropic code-review
+- Anthropic pr-review-toolkit
+- Codex review
+- Codex adversarial-review
+- Devin Review
 
 同じ Anthropic 製でも code-review と pr-review-toolkit は全く違う性格のツールですし、Codex review と Codex adversarial-review も内部的な仕組みが違います。Devin Reviewは他のツールとは毛色が違いますが、クラシル社で活用しているので比較のために入れてます。
 
