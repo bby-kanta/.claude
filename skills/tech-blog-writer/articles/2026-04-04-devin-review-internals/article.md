@@ -1,8 +1,9 @@
 # はじめに
 
 こんにちは、2列で並ぶ列に直列で並んだ2人目、3人目の人は許しません。たろう眼鏡です。
+クラシル社では、うさポというアプリのサーバーサイドの開発をしています。
 
-クラシル社でうさポの開発をしています。AIのコードレビューツールをいくつか使っているのですが、Devin Review だけ指摘の質が異常に高いな感じていました。別のチームのエンジニアからも同じ声が上がっていて、理由が気になったので公式ドキュメントや公式ブログを読んで、裏でどんな仕組みが動いているのかを調べました。
+AIのコードレビューツールをいくつか使っているのですが、Devin Review だけ指摘の質が異常に高いな感じていました。別のチームのエンジニアからも同じ声が上がっていて、理由が気になったので公式ドキュメントや公式ブログを読んで、裏でどんな仕組みが動いているのかを調べました。
 
 結論からいうと、Devin Reviewはdiffを見ているだけではなく、裏で4つの仕組みが動き、リポジトリ全体の文脈を理解しています。この記事ではそれぞれの仕組みを解説します。
 
@@ -65,7 +66,7 @@ DeepWiki → Ask Devin の接続は明確で、[DeepWiki のドキュメント](
 
 # Devin Review のメリット・デメリット
 
-5層の仕組みを踏まえた上で、使ってみて感じたメリットとデメリットを整理します。
+4つの仕組みを踏まえた上で、使ってみて感じたメリットとデメリットを整理します。
 
 **メリット:**
 
@@ -88,9 +89,9 @@ Devin Review のモデルは **Claude Sonnet 4.5** です。[Cognition のブロ
 
 Devin Review の指摘が鋭い理由は、4つの仕組みが裏で動いているからでした。
 
-| Layer | 仕組み | 公式ソース |
-|-------|--------|-----------|
-| 1 | diff + worktree の read-only 探索 | [docs.devin.ai](https://docs.devin.ai/work-with-devin/devin-review) |
-| 2 | CLAUDE.md / .rules 等の自動取り込み | [同上](https://docs.devin.ai/work-with-devin/devin-review) |
-| 3 | Ask Devin セッション（full codebase understanding） | [cognition.ai/blog](https://cognition.ai/blog/devin-review) |
-| 4 | DeepWiki + リポジトリインデックス | [docs.devin.ai](https://docs.devin.ai/work-with-devin/deepwiki), [docs.devin.ai](https://docs.devin.ai/work-with-devin/ask-devin) |
+- diff を起点に必要なファイルを選択的に探索する
+- リポジトリ内の指示ファイルを自動で取り込む
+- Ask Devin セッションでコードベース全体の文脈を理解する
+- リポジトリインデックス + DeepWiki でコードベースの知識を提供する
+
+特にDevin Wiki + Ask Devin の組み合わせが強力で、コードベース全体の文脈を理解した上でレビューしている点が、他のレビューツールと大きく異なる点で、Devin Reviewのストロングポイントだと感じました。
