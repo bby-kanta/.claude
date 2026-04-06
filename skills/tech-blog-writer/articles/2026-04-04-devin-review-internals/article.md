@@ -29,7 +29,7 @@ diffを受け取ると、Bug Catcherが自動で解析します:
 
 BugsはSevere（即対応）とNon-severe（要確認）の2段階、FlagsはInvestigate（要調査）とInformational（補足説明）に分かれます。
 
-diff外のコードにどうアクセスするかは、Layer 2〜4の仕組みが担っています。
+diff外のコードの文脈をどのように理解するかは、Layer 2〜4の仕組みが担っています。
 
 ## Layer 2: 指示ファイルの自動取り込み
 
