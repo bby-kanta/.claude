@@ -11,7 +11,7 @@ AIのコードレビューツールをいくつか使っているのですが、
 
 ## Layer 1: Bug Catcher
 
-分析の起点はPRのイベントです。
+レビューの起点はPRのイベントです。
 
 [公式ドキュメント](https://docs.devin.ai/work-with-devin/devin-review)によると:
 
