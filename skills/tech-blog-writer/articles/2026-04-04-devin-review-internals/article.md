@@ -11,25 +11,26 @@ AIのコードレビューツールをいくつか使っているのですが、
 
 ## Layer 1: Bug Catcher
 
-分析の起点はPRのdiffです。GitHub Appをインストールすると、PRのイベントに応じてレビューが自動で走ります。
+分析の起点はPRのイベントです。
 
 [公式ドキュメント](https://docs.devin.ai/work-with-devin/devin-review)によると:
 
-> Auto-review triggers when:
-> - A PR is opened (non-draft)
-> - New commits are pushed to a PR
-> - A draft PR is marked as ready for review
-> - An enrolled user is added as a reviewer or assignee
+> 自動レビューのトリガー条件:
+> - PRがオープンされたとき（ドラフトを除く）
+> - PRに新しいコミットがpushされたとき
+> - ドラフトPRがReady for reviewになったとき
+> - 登録ユーザーがReviewerまたはAssigneeに追加されたとき
 
-diffを受け取ると、Bug Catcherが自動で解析します:
+Devin Reviewが動くと、Bug Catcherが自動で解析します:
 
-> The Bug Catcher automatically analyzes your PR for potential issues and displays findings in the Analysis sidebar.
+> The Bug Catcher automatically analyzes your PR for potential issues and displays findings in the Analysis sidebar. Findings are organized into two categories: Bugs and Flags.
 
 検出結果は**Bugs**（修正すべきエラー）と**Flags**（情報提供を目的とした注釈）の2カテゴリに分類されます。
 
-BugsはSevere（即対応）とNon-severe（要確認）の2段階、FlagsはInvestigate（要調査）とInformational（補足説明）に分かれます。
+- BugsはSevere（即対応）とNon-severe（要確認）の2段階で、Devin Reviewが修正すべきと確信した問題です。
+- FlagsはInvestigate（要調査）とInformational（補足説明）に分かれています。修正必須とは限らないが、レビュアーが知っておくべき情報や潜在的な問題を指摘します。
 
-diff外のコードの文脈をどのように理解するかは、Layer 2〜4の仕組みが担っています。
+このように重大度で分類されるので、本当に直すべき問題が分かりやすくなっており、指摘の質が高いと感じる理由の一つになっています。
 
 ## Layer 2: 指示ファイルの自動取り込み
 
@@ -84,5 +85,5 @@ DeepWiki → Ask Devin の接続は明確で、[DeepWikiのドキュメント](h
 
 **デメリット:**
 
-- **スタイルやルール違反は指摘はマチマチ**: CLAUDE.md を読み込んでいるはずだが、必ずしも指摘に反映されているわけではない印象。
+- **スタイルやルール違反の指摘はマチマチ**: CLAUDE.md を読み込んでいるはずだが、必ずしも指摘に反映されているわけではない印象。
 - **false positive もある**: 既存コードのバグを掘り起こすことがあるが、逆に既存の意図的な設計を「問題」として指摘してくるケースもある。本当に問題のこともあるので、デメリットというよりは注意点です。
