@@ -9,19 +9,27 @@ AIのコードレビューツールをいくつか使っているのですが、
 
 # Devin Reviewの裏側にある4つの仕組み
 
-## Layer 1: diff + worktree の探索
+## Layer 1: Bug Catcher
 
-分析の起点は PRのdiffです。ただ diffを見るだけではありません。
+分析の起点はPRのdiffです。GitHub Appをインストールすると、PRのイベントに応じてレビューが自動で走ります。
 
 [公式ドキュメント](https://docs.devin.ai/work-with-devin/devin-review)によると:
 
-> The CLI creates a git worktree in a cached directory to check out the PR branch.
+> Auto-review triggers when:
+> - A PR is opened (non-draft)
+> - New commits are pushed to a PR
+> - A draft PR is marked as ready for review
+> - An enrolled user is added as a reviewer or assignee
 
-> The Bug Catcher can execute a limited set of read-only operations scoped to the worktree directory
+diffを受け取ると、Bug Catcherが自動で解析します:
 
-一時的な git worktree を作成し、その中で read-onlyのbashコマンドを実行して、diff外のファイルも選択的に参照します。許可されているコマンドは `ls`, `cat`, `pwd`, `file`, `head`, `tail`, `wc`, `find`, `tree`, `stat`, `du` と、検索系の `grep` です。
+> The Bug Catcher automatically analyzes your PR for potential issues and displays findings in the Analysis sidebar.
 
-リポジトリ全体をアップロードするわけではなく、diffを起点にして必要なファイルを読みに行く仕組みです。
+まず、検出結果は**Bugs**（修正すべきエラー）と**Flags**（要調査）の2カテゴリに分類されます。
+
+BugsはSevere（即対応）とNon-severe（要確認）の2段階、FlagsはInvestigate（要調査）とInformational（補足説明）に分かれます。
+
+diff外のコードにどうアクセスするかは、Layer 2〜4の仕組みが担っています。
 
 ## Layer 2: 指示ファイルの自動取り込み
 
@@ -70,7 +78,7 @@ DeepWiki → Ask Devin の接続は明確で、[DeepWikiのドキュメント](h
 
 **メリット:**
 
-- **diff の外にある問題を見つけられる**: Layer 1（worktree 探索）と Layer 3〜4（Ask Devin + インデックス）のおかげで、変更が他のファイルに与える影響を検出できる。diffだけ見るレビューツールでは構造的に見つけられない問題
+- **diffの外にある問題を見つけられる**: Layer 1（Bug Catcher）でdiffを解析しつつ、Layer 2〜4（指示ファイルの自動取り込み + Ask Devin + インデックス）でコードベース全体の文脈を持っているので、変更が他のファイルに与える影響を検出できる。diffだけ見るレビューツールでは構造的に見つけられない問題
 - **PRを push するたびに再実行される**: webhook（opened, updated, reopened）でトリガーされるので、修正のたびに再レビューが走る。あるPRでは5回レビューが走り、前回の指摘が直っているかも再分析していた
 - **無料**: 2026年4月現在、early release として無料で提供されている
 
