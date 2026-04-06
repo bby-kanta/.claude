@@ -25,7 +25,7 @@ diffを受け取ると、Bug Catcherが自動で解析します:
 
 > The Bug Catcher automatically analyzes your PR for potential issues and displays findings in the Analysis sidebar.
 
-まず、検出結果は**Bugs**（修正すべきエラー）と**Flags**（要調査）の2カテゴリに分類されます。
+検出結果は**Bugs**（修正すべきエラー）と**Flags**（情報提供を目的とした注釈）の2カテゴリに分類されます。
 
 BugsはSevere（即対応）とNon-severe（要確認）の2段階、FlagsはInvestigate（要調査）とInformational（補足説明）に分かれます。
 
