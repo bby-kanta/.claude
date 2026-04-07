@@ -62,7 +62,7 @@ Bug CatcherはPRのdiffだけを見ているわけではありません。[Cogni
 
 ただ、具体的にどうやって探索しているかはブラックボックスです。grepやfindのようなシンプルなコマンドベースの探索なのか、もっと別の仕組みがあるのか。この点については次の考察セクションで掘り下げます。
 
-# 考察: Ask DevinとDeepWikiはレビューにも効いているのか
+### 考察: Ask DevinとDeepWikiはレビューにも効いているのか
 
 Devin ReviewのUI上のレビュー画面にはチャット欄があります。[Cognitionのブログ](https://cognition.ai/blog/devin-review)によると、ここではPRのdiffが自動的にAsk Devinセッションに注入されています:
 
