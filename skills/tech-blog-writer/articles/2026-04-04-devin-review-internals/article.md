@@ -60,27 +60,26 @@ Bug CatcherはPRのdiffだけを見ているわけではありません。[Cogni
 
 変更が既存コードとどう干渉するかを調べるために、コードベースを広く探索しています。探索の過程で既存のバグを見つけた場合はそれも報告します。
 
-## Layer 3.1: Ask Devin セッション
+# 考察: Ask DevinとDeepWikiはレビューにも効いているのか
 
-ここが最も重要な層です。[Cognitionのブログ](https://cognition.ai/blog/devin-review)にこう書いてあります:
+Devin Reviewのレビュー画面にはチャット欄があります。[Cognitionのブログ](https://cognition.ai/blog/devin-review)によると、ここではPRのdiffが自動的にAsk Devinセッションに注入されています:
 
 > Devin Review pipe your diffs into an inline Ask Devin session with full codebase understanding, so you can chat about the changes, without leaving the review.
 
-Devin Reviewは diffを「full codebase understanding」付きの Ask Devin セッションに流して、文脈を把握している可能性があります。[Ask Devin](https://docs.devin.ai/work-with-devin/ask-devin) はコードベースに対する質問応答機能で、リポジトリインデックスをベースにした検索能力を持っています。
+つまりUI上でPRについて質問すると、diffの差分とリポジトリ全体を把握した上で回答が返ってきます。PRに関するAIとのやり取りはここで完結できます。
 
-もしレビュー時にAsk Devinを利用しているならば、Devin Reviewは単にdiffを見ているのではなく、コードベース全体の文脈を持った状態でレビューをすることが可能と言えます。Layer 1〜2で集めた情報に加えて、この Ask Devin セッションが「full codebase understanding」を提供していそうです。
-
-## Layer 3.2: DeepWiki + リポジトリインデックス
-
-Devinはコードベースをバックグラウンドでインデックス化します（[Ask Devinのドキュメント](https://docs.devin.ai/work-with-devin/ask-devin)）:
+[Ask Devin](https://docs.devin.ai/work-with-devin/ask-devin)はリポジトリインデックスをベースにしたコードベース検索機能で、その上に[DeepWiki](https://docs.devin.ai/work-with-devin/deepwiki)が構築されています:
 
 > After connecting your GitHub, GitLab, or other source code provider, index your repository. Devin automatically indexes your codebase in the background, enabling powerful tools like DeepWiki and Ask Devin.
 
-このインデックスの上に [DeepWiki](https://docs.devin.ai/work-with-devin/deepwiki) が構築されます:
+[DeepWikiのドキュメント](https://docs.devin.ai/work-with-devin/deepwiki)には「`Ask Devin will use information in the Wiki`」とも書かれており、Ask Devinの回答にはDeepWikiの情報も活用されていることがわかります。Ask Devinの回答の質が高いのは、DeepWikiを通じてリポジトリ全体の文脈を理解できるからだと推測できます。
 
-> Devin now automatically indexes your repos and produces wikis with architecture diagrams, links to sources, and summaries of your codebase.
+チャット欄でAsk Devinが使われているのはドキュメントから読み取れます。
 
-DeepWiki → Ask Devin の接続は明確で、[DeepWikiのドキュメント](https://docs.devin.ai/work-with-devin/deepwiki)に「`Ask Devin will use information in the Wiki`」と書かれています。DeepWikiの情報は間接的にレビューにも効いていると考えられます。
+ここからは完全に妄想ですが、Bug Catcherのコードベース探索にもこのAsk Devin経由でDeep Wikiを活用する仕組みが使われていたりしないかなと期待しています。
+
+grepやfindでdiff外のファイルを読みに行くのは他のAIレビューツールでもやっています。
+ただ、それだけでは説明がつかないくらいDevin Reviewの指摘は質が良い。リポジトリインデックスとDeepWikiがすでにあるなら、レビューにも活かしていてほしいなと思っています。
 
 # Devin Reviewのメリット・デメリット
 
