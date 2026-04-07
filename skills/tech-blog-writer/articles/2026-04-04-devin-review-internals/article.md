@@ -60,7 +60,7 @@ Bug CatcherはPRのdiffだけを見ているわけではありません。[Cogni
 
 変更が既存コードとどう干渉するかを調べるために、コードベースを広く探索しています。探索の過程で既存のバグを見つけた場合はそれも報告します。
 
-ただ、具体的にどうやって探索しているかは公開されていません。grepやfindのようなコマンドベースの探索なのか、もっと別の仕組みがあるのか。この点については次の考察セクションで掘り下げます。
+ただ、具体的にどうやって探索しているかはブラックボックスです。grepやfindのようなシンプルなコマンドベースの探索なのか、もっと別の仕組みがあるのか。この点については次の考察セクションで掘り下げます。
 
 # 考察: Ask DevinとDeepWikiはレビューにも効いているのか
 
@@ -74,13 +74,13 @@ Devin ReviewのUI上のレビュー画面にはチャット欄があります。
 
 > After connecting your GitHub, GitLab, or other source code provider, index your repository. Devin automatically indexes your codebase in the background, enabling powerful tools like DeepWiki and Ask Devin.
 
-[DeepWikiのドキュメント](https://docs.devin.ai/work-with-devin/deepwiki)には「`Ask Devin will use information in the Wiki`」とも書かれており、Ask Devinの回答にはDeepWikiの情報も活用されていることがわかります。Ask Devinの回答の質が高いのは、DeepWikiを通じてリポジトリ全体の文脈を理解できるからだと推測できます。
+[DeepWikiのドキュメント](https://docs.devin.ai/work-with-devin/deepwiki)には「`Ask Devin will use information in the Wiki`」とも書かれており、Ask Devinの回答にはDeepWikiの情報も活用されていることがわかります。Ask Devinの回答の質が高いのは、DeepWikiを通じてリポジトリ全体の文脈を理解できているからですね。
 
-ここからは完全に妄想ですが、Bug Catcherのコードベース探索にもこのAsk Devin経由でDeep Wikiを活用する仕組みが使われていたりしないかなと期待しています。
+ここからは完全に妄想ですが、Bug Catcherのコードベース探索にもこのAsk Devin経由でのDeep Wikiを活用する仕組みが使われていたりしないかなと期待しています。
 
 grepやfindでdiff外のファイルを読みに行くのは他のAIレビューツールでも良くやっていますが、他のツールとは一線を画す指摘の質の高さなので、何か独自の仕組みを入れているのではないかと想像しています。リポジトリインデックスとDeepWikiという検索基盤がすでにあって、チャット欄ではそれをAsk Devin経由で活用している。であれば、Bug Catcherも同じ基盤を使ってコードベースを探索していてもおかしくないなと。
 
-現在Cognitionにはこの仕組みを問い合わせています。意図的に仕組みを非公開にしている可能性が高いので、良い回答は得られないかもしれませんが、何かわかったら追記します。
+現在Cognition社にはこの仕組みを問い合わせています。意図的に仕組みを非公開にしている可能性が高いので、良い回答は得られないかもしれませんが、何かわかったら追記します。
 
 # Devin Reviewのメリット・デメリット
 
