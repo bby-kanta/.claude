@@ -5,13 +5,13 @@
 
 AIのコードレビューツールをいくつか使っているのですが、Devin Reviewだけ指摘の質が異常に高いなと感じていました。別のチームのエンジニアからも多々同じ声が上がっていて、理由が気になったので公式ドキュメントや公式ブログを読んで、裏でどんな仕組みが動いているのかを調べました。
 
-結論からいうと、Devin Reviewはdiffを見ているだけではなく、裏で4つの仕組みが動き、リポジトリ全体の文脈を理解しています。この記事ではそれぞれの仕組みを解説します。
+結論からいうと、Devin Reviewはdiffを見ているだけではなく、リポジトリ全体の文脈を理解しています。この記事ではDevin Reviewの仕組みを解説します。
 
 # Devin Reviewの裏側にある4つの仕組み
 
 ## Layer 1: Bug Catcher
 
-レビューの起点はPRのイベントです。
+分析の起点はPRのイベントです。
 
 [公式ドキュメント](https://docs.devin.ai/work-with-devin/devin-review)によると:
 
@@ -27,7 +27,7 @@ Devin Reviewが動くと、Bug Catcherが自動で解析します:
 
 検出結果は**Bugs**（修正すべきエラー）と**Flags**（情報提供を目的とした注釈）の2カテゴリに分類されます。
 
-- BugsはSevere（即対応）とNon-severe（要確認）の2段階で、Devin Reviewが修正すべきと確信した問題です。体感ですが、Devin Reviewが緊急度高いと判断した指摘は、本当にクリティカルな問題であることが多いです。
+- BugsはSevere（即対応）とNon-severe（要確認）の2段階で、Devin Reviewが修正すべきと確信した問題です。
 - FlagsはInvestigate（要調査）とInformational（補足説明）に分かれています。修正必須とは限らないが、レビュアーが知っておくべき情報や潜在的な問題を指摘します。
 
 このように重大度で分類されるので、本当に直すべき問題が分かりやすくなっており、指摘の質が高いと感じる理由の一つになっています。
@@ -51,17 +51,26 @@ Devin Reviewはリポジトリ内の様々なAI系の設定ファイルを自動
 
 Devin Reviewは基本英語で指摘してくるので、とりあえず「日本語で指摘すること」みたいな指示を書いておくのがおすすめです。
 
-## Layer 3: Ask Devin セッション
+## Layer 3: コードベース全体の探索
+
+Bug CatcherはPRのdiffだけを見ているわけではありません。[Cognition公式のポスト](https://x.com/cognition/status/2016261335198400735)によると:
+
+> Devin Review's bug catcher goes beyond just analyzing the code that was changed in a PR. It also scans the broader codebase to understand how changes might interact or interfere with existing code.
+> If it comes across any pre-existing bugs or issues, it'll report those too!
+
+変更が既存コードとどう干渉するかを調べるために、コードベースを広く探索しています。探索の過程で既存のバグを見つけた場合はそれも報告します。
+
+## Layer 3.1: Ask Devin セッション
 
 ここが最も重要な層です。[Cognitionのブログ](https://cognition.ai/blog/devin-review)にこう書いてあります:
 
 > Devin Review pipe your diffs into an inline Ask Devin session with full codebase understanding, so you can chat about the changes, without leaving the review.
 
-Devin Reviewは diffを「full codebase understanding」付きの Ask Devin セッションに流して動いています。[Ask Devin](https://docs.devin.ai/work-with-devin/ask-devin) はコードベースに対する質問応答機能で、リポジトリインデックスをベースにした検索能力を持っています。
+Devin Reviewは diffを「full codebase understanding」付きの Ask Devin セッションに流して、文脈を把握している可能性があります。[Ask Devin](https://docs.devin.ai/work-with-devin/ask-devin) はコードベースに対する質問応答機能で、リポジトリインデックスをベースにした検索能力を持っています。
 
-つまり Devin Reviewは、単に diffを見ているのではなく、コードベース全体の文脈を持った状態でレビューをしています。Layer 1〜2で集めた情報に加えて、この Ask Devin セッションが「full codebase understanding」を提供しているわけです。
+もしレビュー時にAsk Devinを利用しているならば、Devin Reviewは単にdiffを見ているのではなく、コードベース全体の文脈を持った状態でレビューをすることが可能と言えます。Layer 1〜2で集めた情報に加えて、この Ask Devin セッションが「full codebase understanding」を提供していそうです。
 
-## Layer 4: DeepWiki + リポジトリインデックス
+## Layer 3.2: DeepWiki + リポジトリインデックス
 
 Devinはコードベースをバックグラウンドでインデックス化します（[Ask Devinのドキュメント](https://docs.devin.ai/work-with-devin/ask-devin)）:
 
@@ -71,7 +80,7 @@ Devinはコードベースをバックグラウンドでインデックス化し
 
 > Devin now automatically indexes your repos and produces wikis with architecture diagrams, links to sources, and summaries of your codebase.
 
-DeepWiki → Ask Devin の接続は明確で、[DeepWikiのドキュメント](https://docs.devin.ai/work-with-devin/deepwiki)に「`Ask Devin will use information in the Wiki`」と書かれています。Layer 3で見た通り Devin Reviewは Ask Devin セッション経由で動いているので、DeepWikiの情報は間接的にレビューにも効いていると考えられます。
+DeepWiki → Ask Devin の接続は明確で、[DeepWikiのドキュメント](https://docs.devin.ai/work-with-devin/deepwiki)に「`Ask Devin will use information in the Wiki`」と書かれています。DeepWikiの情報は間接的にレビューにも効いていると考えられます。
 
 # Devin Reviewのメリット・デメリット
 
@@ -79,11 +88,11 @@ DeepWiki → Ask Devin の接続は明確で、[DeepWikiのドキュメント](h
 
 **メリット:**
 
-- **diffの外にある問題を見つけられる**: Layer 1（Bug Catcher）でdiffを解析しつつ、Layer 2〜4（指示ファイルの自動取り込み + Ask Devin + インデックス）でコードベース全体の文脈を持っているので、変更が他のファイルに与える影響を検出できる。diffだけ見るレビューツールでは構造的に見つけられない問題
+- **diffの外にある問題を見つけられる**: 変更が他のファイルに与える影響を検出できる。diffだけ見るレビューツールでは構造的に見つけられない問題
 - **PRを push するたびに再実行される**: webhook（opened, updated, reopened）でトリガーされるので、修正のたびに再レビューが走る。あるPRでは5回レビューが走り、前回の指摘が直っているかも再分析していた
 - **無料**: 2026年4月現在、early release として無料で提供されている
 
 **デメリット:**
 
-- **スタイルやルール違反の指摘はマチマチ**: CLAUDE.md を読み込んでいるはずだが、必ずしも指摘に反映されているわけではない印象。
+- **スタイルやルール違反の指摘はマチマチ**: CLAUDE.md を読み込んでいるが、必ずしも指摘に反映されているわけではない印象。
 - **false positive もある**: 既存コードのバグを掘り起こすことがあるが、逆に既存の意図的な設計を「問題」として指摘してくるケースもある。本当に問題のこともあるので、デメリットというよりは注意点です。
