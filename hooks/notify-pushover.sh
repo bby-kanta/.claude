@@ -1,3 +1,5 @@
+# https://zenn.dev/dely_jp/articles/0b78b2b1530878
+
 #!/bin/bash
 # CLAUDE_QUIET=1 を設定すると通知をスキップする（セッション単位で無効化したい場合に使用）
 [ "${CLAUDE_QUIET}" = "1" ] && exit 0
