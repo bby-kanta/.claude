@@ -60,9 +60,11 @@ Bug CatcherはPRのdiffだけを見ているわけではありません。[Cogni
 
 変更が既存コードとどう干渉するかを調べるために、コードベースを広く探索しています。探索の過程で既存のバグを見つけた場合はそれも報告します。
 
+ただ、具体的にどうやって探索しているかは公開されていません。grepやfindのようなコマンドベースの探索なのか、もっと別の仕組みがあるのか。この点については次の考察セクションで掘り下げます。
+
 # 考察: Ask DevinとDeepWikiはレビューにも効いているのか
 
-Devin Reviewのレビュー画面にはチャット欄があります。[Cognitionのブログ](https://cognition.ai/blog/devin-review)によると、ここではPRのdiffが自動的にAsk Devinセッションに注入されています:
+Devin ReviewのUI上のレビュー画面にはチャット欄があります。[Cognitionのブログ](https://cognition.ai/blog/devin-review)によると、ここではPRのdiffが自動的にAsk Devinセッションに注入されています:
 
 > Devin Review pipe your diffs into an inline Ask Devin session with full codebase understanding, so you can chat about the changes, without leaving the review.
 
