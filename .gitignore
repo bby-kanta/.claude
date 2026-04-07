@@ -11,3 +11,6 @@
 
 # And not .gitignore itself
 !.gitignore
+
+# And not settings.json
+!settings.json
