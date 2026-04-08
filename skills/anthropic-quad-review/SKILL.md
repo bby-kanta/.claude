@@ -55,7 +55,7 @@ gh pr view --json number,headRepository
 ### Step 2: 出力ディレクトリの準備
 
 ```
-/Users/kuboderakanta/claude-review-plugin-diff/review-output/{リポジトリ名}/{PR番号}/
+/Users/kuboderakanta/.claude/skills/cross-reviewer-analysis/review-output/{リポジトリ名}/{PR番号}/
 ```
 
 `mkdir -p` でディレクトリを作成する。
