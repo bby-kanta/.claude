@@ -1,4 +1,4 @@
-# KarpathyのLLM Wikiを Claude Codeのスキルにした — RAGとは違う知識の貯め方
+# 【LLM Wiki】ナレッジ分散地獄からの脱却。ドキュメントを常時育てる仕組み
 
 ## はじめに
 
