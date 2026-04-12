@@ -70,7 +70,7 @@ Karpathy氏自身がGistの中でこう書いています。
 ## Claude Codeのスキルに落とし込む
 
 Karpathy氏のGistをそのまま`/skill-creator`に投げます。
-もうほぼやることはこれぐらいです。
+頭を使ってやることはほぼこれぐらいです。
 
 `/skill-creator`はClaude Codeのスキル（SKILL.md）を対話的に設計・生成するスキルです。概念文書を読ませると、ユーザーとのQ&Aを通じて具体的なSKILL.mdを生成してくれます。
 
