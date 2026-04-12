@@ -76,7 +76,7 @@ Karpathy氏のGistをそのまま`/skill-creator`に投げます。
 
 skill-creatorにいくつか質問されました。
 
-- **ユースケース**: 技術リサーチがメイン。RDB、Railsなどジャンルごとにフォルダを分けたい。
+- **ユースケース**: 技術リサーチがメイン。MySQL、Railsなどジャンルごとにフォルダを分けたい。
 - **閲覧ツール**: Obsidianを使う。`[[wikilinks]]`形式とYAMLフロントマターを使う。
 - **配置場所**: `~/Documents/Obsidian Vault/llm-wiki/`
 - **言語**: すべて日本語
