@@ -7,7 +7,7 @@
 
 [前回の記事](https://zenn.dev/dely_jp/articles/3117e590465e38)ではKarpathy氏のautoresearchを紹介して、Railsのパフォーマンスチューニングに転用しました。今回もKarpathy氏です。もう完全にファンクラブです。
 
-2026年4月、Karpathy氏が[LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)というGistを公開しました。ざっくり言うと、RAGのように毎回ドキュメントを検索して回答を生成するのではなく、LLMに永続的なWikiを書かせて知識を蓄積していくというアプローチです。
+2026年4月、Karpathy氏が[LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)というGistを公開しました。ざっくり言うと、RAGのように毎回ドキュメントを検索して回答を生成するのではなく、LLMに永続的なWikiを書かせて知識を蓄積&整理&育成していくというアプローチです。Obsidianと組み合わせると、LLMによりWikiが整理された状態で閲覧・グラフで可視化できるので相性がいいです。
 
 RAGとの違い、Claude Codeへの実装、自分で追加した設計判断の3つを書きます。
 
