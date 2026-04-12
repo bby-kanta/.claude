@@ -1,4 +1,4 @@
-# 【LLM Wiki】ナレッジ分散地獄からの脱却。ドキュメントを常時育てる仕組み
+# 【LLM Wiki】ObsidianとClaude Codeでナレッジ分散地獄からの脱却。
 
 ## はじめに
 
