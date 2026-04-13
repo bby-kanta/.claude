@@ -35,7 +35,8 @@
       "Bash(node:*)",
       "Bash(git diff:*)",
       "Bash(git log:*)",
-      "Bash(git fetch:*)"
+      "Bash(git fetch:*)",
+      "Bash(sed -i '' '/^disable-model-invocation: true$/d':*)"
     ],
     "deny": [],
     "defaultMode": "default"
