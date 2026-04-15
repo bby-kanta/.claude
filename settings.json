@@ -94,6 +94,16 @@
       }
     }
   },
+  "sandbox": {
+    "filesystem": {
+      "allowWrite": [
+        "/Users/kuboderakanta/.claude/plugins/data/"
+      ]
+    },
+    "excludedCommands": [
+      "codex"
+    ]
+  },
   "effortLevel": "high",
   "feedbackSurveyState": {
     "lastShownTime": 1754087424794
