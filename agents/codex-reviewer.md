@@ -37,7 +37,7 @@ ls -t ~/.claude/plugins/data/codex-openai-codex/state/*/jobs/*.json 2>/dev/null 
 ### Step 2: Skill を実行（最初のツール呼び出しは必ずこれ）
 
 Skill ツールで以下を実行する:
-- `skill="codex:review"`
+- `skill="codex:review --base main"`
 - `args="--wait --scope branch"`
 
 **Skill が失敗した場合**: 以下の Bash コマンドにフォールバックする。
