@@ -4,17 +4,17 @@ INPUT=$(cat)
 COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
 
 BLOCKED=(
-  "^git push"
-  "^git merge"
-  "^git rebase"
-  "^git reset"
-  "^git checkout -b"
-  "^gh pr merge"
-  "^gh pr close"
-  "^gh pr comment"
-  "^gh pr edit"
-  "^rm "
-  "^mv "
+  "(^|[&|;][[:space:]]*)git push"
+  "(^|[&|;][[:space:]]*)git merge"
+  "(^|[&|;][[:space:]]*)git rebase"
+  "(^|[&|;][[:space:]]*)git reset"
+  "(^|[&|;][[:space:]]*)git checkout -b"
+  "(^|[&|;][[:space:]]*)gh pr merge"
+  "(^|[&|;][[:space:]]*)gh pr close"
+  "(^|[&|;][[:space:]]*)gh pr comment"
+  "(^|[&|;][[:space:]]*)gh pr edit"
+  "(^|[&|;][[:space:]]*)rm[[:space:]]"
+  "(^|[&|;][[:space:]]*)mv[[:space:]]"
 )
 
 for pattern in "${BLOCKED[@]}"; do
