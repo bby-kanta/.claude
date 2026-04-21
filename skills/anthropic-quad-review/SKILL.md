@@ -102,16 +102,27 @@ git worktree add -b quad-review-{PR番号} /tmp/quad-review-{PR番号} origin/{P
 
 Agent ツールで4つのサブエージェントを **同一ターンで同時に** 起動する。
 
-**重要**: `{use_worktree}` が true の場合、各サブエージェントのプロンプトの **先頭** に以下のディレクトリ移動指示を追加する。false の場合は追加しない:
+**重要**: `{use_worktree}` が true の場合、各サブエージェントのプロンプトの **先頭** に以下のワークツリー指示を追加する。false の場合は追加しない:
 
 ```
-まず最初に以下のコマンドを Bash で実行して作業ディレクトリを移動してください。
-以降のすべての Bash 操作・Skill 実行の前に必ずこのディレクトリにいることを確認してください:
+**重要: ワークツリーでの作業ルール**
 
-cd {worktree_path}
+レビュー対象は {worktree_path} にある PR ブランチの clean checkout です。
+メインリポジトリ（元の作業ディレクトリ）ではありません。
 
-NOTE: このディレクトリは PR ブランチの clean checkout です。
-変更差分の取得には `git diff main...HEAD` を、変更ファイル一覧には `git diff main...HEAD --name-only` を使用してください。
+Claude Code の Bash ツールはシェル状態（cd を含む）が呼び出し間で保持されません。
+以下のルールを厳守してください:
+
+1. **Bash**: すべてのコマンドを `cd {worktree_path} && <コマンド>` の形式で単一の Bash 呼び出しとして実行すること。`cd` を単独で実行しても次の Bash 呼び出しには反映されません。
+   - 例: `cd {worktree_path} && git diff main...HEAD`
+   - 例: `cd {worktree_path} && git diff main...HEAD --name-only`
+   - 例: `cd {worktree_path} && node /path/to/script.mjs review --wait --scope branch`
+
+2. **Read / Grep / Glob**: ファイルパスは `{worktree_path}/` をベースにすること。メインリポジトリのパスを使わないこと。
+   - 正: Read("{worktree_path}/app/models/user.rb")
+   - 誤: Read("/Users/.../retail-api/.../user.rb")
+
+3. **検証**: 最初の Bash 呼び出しで `cd {worktree_path} && git log --oneline -1` を実行し、PR ブランチにいることを確認すること。
 ```
 
 #### エージェントA（Anthropic code-review）
@@ -196,6 +207,23 @@ NOTE: このディレクトリは PR ブランチの clean checkout です。
 - エージェントDの結果 → `{output_dir}/codex-adversarial-review.md`
 
 Codex系（C, D）の出力ファイルには、サブエージェントが返した「実行証跡」セクションと「レビュー結果」セクションの両方をそのまま書き出す。実行証跡にはコマンド全文・終了コード・codex-companion.mjs の生出力が含まれるため、Codex経由で実行された証拠として機能する。
+
+### Step 5.5: レビュー対象の検証
+
+レビュー結果を書き出した後、PRの変更ファイル一覧と各レビュー結果で言及されているファイルを突合する。
+
+```bash
+gh pr view {PR番号} --json files --jq '.files[].path'
+```
+
+レビュー結果内で言及されているファイルがPRの変更ファイルと一致しない場合（例: PRの変更は `design_docs/recurring/` だがレビューが `REVIEW.md` に言及）、以下の警告を完了報告に含める:
+
+```
+⚠️ レビュー対象の不一致を検出:
+- PRの変更ファイル: {PRの変更ファイル一覧}
+- レビューで言及されたファイル: {レビュー内のファイル一覧}
+ワークツリーへのディレクトリ移動が正しく行われなかった可能性があります。
+```
 
 ### Step 6: ワークツリーのクリーンアップ
 
