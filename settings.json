@@ -36,7 +36,20 @@
       "Bash(git diff:*)",
       "Bash(git log:*)",
       "Bash(git fetch:*)",
-      "Bash(sed -i '' '/^disable-model-invocation: true$/d':*)"
+      "Bash(sed -i '' '/^disable-model-invocation: true$/d':*)",
+      "Bash(rg:*)",
+      "Bash(find:*)",
+      "Bash(sed -n:*)",
+      "Bash(nl:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(pwd:*)",
+      "Bash(git show:*)",
+      "Bash(git status:*)",
+      "Bash(git worktree:*)",
+      "Bash(gh pr view:*)",
+      "Bash(cd /tmp/quad-review-*:*)",
+      "Bash(cd /private/tmp/quad-review-*:*)"
     ],
     "deny": [],
     "defaultMode": "default"
