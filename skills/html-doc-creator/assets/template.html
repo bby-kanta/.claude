@@ -1,0 +1,444 @@
+<title>【ドキュメントタイトル】</title>
+<style>
+  :root {
+    --ground: #FAF9F6;
+    --surface: #FFFFFF;
+    --ink: #23252E;
+    --ink-2: #5A5D6B;
+    --line: #E3E2DC;
+    --accent: #4A4AB8;
+    --accent-soft: #EDEDF9;
+    --critical: #B23A22;
+    --critical-soft: #F9ECE8;
+    --high: #9A6A12;
+    --high-soft: #F7F0E0;
+    --ok: #2E7D53;
+    --ok-soft: #E7F3EC;
+    --ops: #4A6B8A;
+    --ops-soft: #E9F0F6;
+    --code-bg: #F1F0EB;
+    --shadow: 0 1px 3px rgba(35, 37, 46, 0.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #16171D;
+      --surface: #1E2027;
+      --ink: #E6E6EA;
+      --ink-2: #9EA1AF;
+      --line: #33353F;
+      --accent: #9C9CE8;
+      --accent-soft: #2A2A45;
+      --critical: #E58570;
+      --critical-soft: #3C241E;
+      --high: #D9A94E;
+      --high-soft: #37301D;
+      --ok: #7BC49A;
+      --ok-soft: #1E3328;
+      --ops: #8FB3D4;
+      --ops-soft: #22303D;
+      --code-bg: #272932;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #16171D;
+    --surface: #1E2027;
+    --ink: #E6E6EA;
+    --ink-2: #9EA1AF;
+    --line: #33353F;
+    --accent: #9C9CE8;
+    --accent-soft: #2A2A45;
+    --critical: #E58570;
+    --critical-soft: #3C241E;
+    --high: #D9A94E;
+    --high-soft: #37301D;
+    --ok: #7BC49A;
+    --ok-soft: #1E3328;
+    --ops: #8FB3D4;
+    --ops-soft: #22303D;
+    --code-bg: #272932;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  }
+  :root[data-theme="light"] {
+    --ground: #FAF9F6;
+    --surface: #FFFFFF;
+    --ink: #23252E;
+    --ink-2: #5A5D6B;
+    --line: #E3E2DC;
+    --accent: #4A4AB8;
+    --accent-soft: #EDEDF9;
+    --critical: #B23A22;
+    --critical-soft: #F9ECE8;
+    --high: #9A6A12;
+    --high-soft: #F7F0E0;
+    --ok: #2E7D53;
+    --ok-soft: #E7F3EC;
+    --ops: #4A6B8A;
+    --ops-soft: #E9F0F6;
+    --code-bg: #F1F0EB;
+    --shadow: 0 1px 3px rgba(35, 37, 46, 0.06);
+  }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", -apple-system, sans-serif;
+    line-height: 1.85;
+    font-size: 15.5px;
+    margin: 0;
+  }
+  code {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.86em;
+    background: var(--code-bg);
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
+    word-break: break-all;
+  }
+  a { color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ---------- layout + toc ---------- */
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+  [id] { scroll-margin-top: 1.6rem; }
+  .layout {
+    max-width: 78rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: grid;
+    grid-template-columns: 16rem minmax(0, 52rem);
+    gap: 3.5rem;
+    justify-content: center;
+  }
+  .layout.no-toc { grid-template-columns: minmax(0, 52rem); }
+  main {
+    min-width: 0;
+    padding: 3rem 0 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+  .toc {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    max-height: 100vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 3.2rem 0 2rem;
+    font-size: 0.8rem;
+    line-height: 1.6;
+  }
+  .toc-title {
+    margin: 0 0 0.8rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    color: var(--ink-2);
+    font-weight: 700;
+  }
+  .toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .toc ol ol { margin: 0.15rem 0 0.3rem; padding-left: 0.9rem; }
+  .toc a {
+    display: block;
+    color: var(--ink-2);
+    text-decoration: none;
+    padding: 0.22rem 0.7rem;
+    border-left: 2px solid var(--line);
+    border-radius: 0 4px 4px 0;
+  }
+  .toc a:hover { color: var(--ink); background: var(--accent-soft); opacity: 1; }
+  .toc a.active {
+    color: var(--accent);
+    font-weight: 700;
+    border-left-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  @media (max-width: 62rem) {
+    .layout { display: block; }
+    .toc {
+      position: static;
+      max-height: none;
+      padding: 2.5rem 0 1.5rem;
+      border-bottom: 1px solid var(--line);
+    }
+    main { padding-top: 2rem; }
+  }
+
+  /* ---------- header ---------- */
+  .doc-header { display: flex; flex-direction: column; gap: 1.1rem; }
+  .eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    color: var(--ink-2);
+    text-transform: uppercase;
+  }
+  .eyebrow strong { color: var(--accent); font-weight: 600; }
+  h1 {
+    font-size: 1.85rem;
+    line-height: 1.4;
+    margin: 0;
+    font-weight: 700;
+    text-wrap: balance;
+  }
+  .lead { margin: 0; color: var(--ink-2); }
+  .lead b { color: var(--ink); }
+
+  /* ---------- verdict (結論カード) ---------- */
+  .verdict {
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 1.4rem 1.6rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .verdict-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .verdict p { margin: 0; }
+  .verdict .answer { font-size: 1.12rem; font-weight: 700; line-height: 1.7; }
+
+  .verdict-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    margin-top: 0.4rem;
+  }
+  .verdict-card {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    background: var(--ground);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .verdict-card h3 { margin: 0; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .verdict-card p { margin: 0; font-size: 0.88rem; color: var(--ink-2); }
+
+  /* ---------- pills ---------- */
+  .pill {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 0.15em 0.7em;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .pill.ok       { color: var(--ok);       background: var(--ok-soft); }
+  .pill.critical { color: var(--critical); background: var(--critical-soft); }
+  .pill.high     { color: var(--high);     background: var(--high-soft); }
+  .pill.required { color: var(--accent);   background: var(--accent-soft); }
+  .pill.ops      { color: var(--ops);      background: var(--ops-soft); }
+
+  /* ---------- sections ---------- */
+  section { display: flex; flex-direction: column; gap: 1.1rem; }
+  h2 {
+    font-size: 1.3rem;
+    margin: 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--line);
+    text-wrap: balance;
+  }
+  h2 .sec-no {
+    color: var(--accent);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 0.85em;
+    margin-right: 0.6em;
+  }
+  section > p { margin: 0; }
+  .note { font-size: 0.86rem; color: var(--ink-2); margin: 0; }
+
+  /* ---------- flow diagram ---------- */
+  .flow-wrap { overflow-x: auto; }
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-width: 34rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+    padding: 1.5rem 1.6rem;
+    box-shadow: var(--shadow);
+  }
+  .flow-step {
+    display: grid;
+    grid-template-columns: 9.5rem 1fr;
+    gap: 1rem;
+    align-items: baseline;
+  }
+  .flow-step .who {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--ops);
+    text-align: right;
+  }
+  .flow-step .what { font-size: 0.9rem; }
+  .flow-step .what code { font-size: 0.82em; }
+  .flow-arrow {
+    grid-column: 2;
+    color: var(--ink-2);
+    font-size: 0.8rem;
+    padding: 0.15rem 0 0.15rem 1rem;
+    display: grid;
+    grid-template-columns: 9.5rem 1fr;
+    gap: 1rem;
+  }
+  .flow-arrow span { grid-column: 2; }
+  .flow-hazard {
+    color: var(--critical);
+    font-weight: 700;
+    font-size: 0.82rem;
+  }
+
+  /* ---------- findings (指摘・課題カード) ---------- */
+  .finding {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    padding: 1.2rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+  .finding.critical { border-left: 4px solid var(--critical); }
+  .finding.high     { border-left: 4px solid var(--high); }
+  .finding.required { border-left: 4px solid var(--accent); }
+  .finding.ops      { border-left: 4px solid var(--ops); }
+  .finding.ok       { border-left: 4px solid var(--ok); }
+  .finding h3 {
+    margin: 0;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    line-height: 1.6;
+  }
+  .finding .f-no {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    color: var(--ink-2);
+    font-size: 0.85em;
+  }
+  .finding p { margin: 0; font-size: 0.92rem; }
+  .finding .fix {
+    font-size: 0.9rem;
+    background: var(--accent-soft);
+    border-radius: 6px;
+    padding: 0.6rem 0.9rem;
+  }
+  .finding .fix b { color: var(--accent); }
+
+  /* ---------- tables ---------- */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+  th, td { text-align: left; padding: 0.6rem 1rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  th {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-2);
+    font-weight: 600;
+    white-space: nowrap;
+    background: var(--ground);
+  }
+  td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  ul { margin: 0; padding-left: 1.4rem; display: flex; flex-direction: column; gap: 0.45rem; }
+  li { margin: 0; }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding-top: 1.2rem;
+    font-size: 0.82rem;
+    color: var(--ink-2);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    a { transition: opacity 120ms ease; }
+    a:hover { opacity: 0.75; }
+  }
+</style>
+
+<div class="layout">
+<!--
+  目次: セクション id (sec-1, sec-2, ...) とリンクを一致させる。
+  サブ項目はネストした <ol> で。セクションが2つ以下なら <nav> を削除し、
+  上の <div class="layout"> を <div class="layout no-toc"> に変える。
+-->
+<nav class="toc" aria-label="目次">
+  <p class="toc-title">目次</p>
+  <ol>
+    <li><a href="#sec-1">1. 【セクション名】</a></li>
+    <li><a href="#sec-2">2. 【セクション名】</a></li>
+  </ol>
+</nav>
+<main>
+  <header class="doc-header">
+    <p class="eyebrow"><strong>【文書種別】</strong> · 【対象・スコープ】 · 【YYYY-MM-DD】</p>
+    <h1>【ドキュメントタイトル】</h1>
+    <p class="lead">【リード文。結論から書き、<b>最重要ポイント</b>は太字で。】</p>
+  </header>
+
+  <!--
+    ここから本文。references/components.md のカタログからコンポーネントを選んで組み立てる。
+    セクション構成は自由。以下は最小のスケルトン。
+  -->
+
+  <section id="sec-1">
+    <h2><span class="sec-no">1</span>【セクション見出し】</h2>
+    <p>【本文】</p>
+  </section>
+
+  <section id="sec-2">
+    <h2><span class="sec-no">2</span>【セクション見出し】</h2>
+    <p>【本文】</p>
+  </section>
+
+  <footer>
+    【参照元・調査対象・作成日など、読者が一次情報に戻るための情報】
+  </footer>
+</main>
+</div>
+<script>
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll(".toc a"));
+  var targets = links
+    .map(function (a) { return document.getElementById(a.getAttribute("href").slice(1)); })
+    .filter(Boolean);
+  if (!targets.length) return;
+
+  function onScroll() {
+    var pos = window.scrollY + 140;
+    var current = targets[0];
+    for (var i = 0; i < targets.length; i++) {
+      if (targets[i].offsetTop <= pos) current = targets[i];
+    }
+    links.forEach(function (a) {
+      a.classList.toggle("active", a.getAttribute("href") === "#" + current.id);
+    });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+  onScroll();
+})();
+</script>
