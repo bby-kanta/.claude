@@ -1,4 +1,4 @@
-# Rails Doctrineを、大AIエージェント時代に読み直し、思想を体現できているかを調査したぞ
+# Rails Doctrineを、大AIエージェント時代に読み直したら今こそぶっ刺さる思想だったぞ
 
 こんにちは、エスカレーターの右側（関西では左側）で最初に止まる人は英雄です。たろう眼鏡です。
 たろう眼鏡も隙あらば止まって英雄活動をしています。
@@ -155,7 +155,7 @@ DHHが人間相手に答えた「ナイフを渡すか」という問いに、�
 
 Doctrineには[Convention over Configuration（設定より規約）](https://rubyonrails.org/doctrine#convention-over-configuration)という柱もあります。主キーは`id`、`Person`モデルのテーブルは`people`、のようにフレームワーク側が「普通はこうする」を規約として先に決めておくことで、開発者をどうでもいい意思決定の繰り返しから解放するという思想です。Railsの生産性の源泉ですね。
 
-このCoCの強さは、規約を増やしすぎない自制とセットで成立しています。何でもかんでも規約にしたら、それはただの分厚い社内ルールブックです。
+DHHは、規約が肩代わりすべきなのは「繰り返し審議する価値のない意思決定」だと言っています。裏を返すと、審議に値する判断まで規約に押し込めば、CoCはただの分厚い社内ルールブックに堕ちる。規約の強さは、なんでもかんでも増やしすぎない自制とセットです。
 
 `.claude/rules/`にルールを追加するには、専用のフローを通ります。
 
@@ -165,10 +165,17 @@ Doctrineには[Convention over Configuration（設定より規約）](https://ru
 
 「Rubyの標準的なベストプラクティス」や「コードを2〜3ファイル読めば分かるパターン」は明示的に却下されます。AIが既存コードから読み取れることをルールに書くのは、コンテキストの無駄遣いだからです。
 
-ルールを書くコストは、書いた瞬間には終わりません。そのルールは全セッションで読み込まれ続けますし、いつか陳腐化して嘘になるリスクも抱えます。「規約は増やさないほど強い」というCoCの原理が、AI向けルールでも同じ形で再発明されていました。
+ルールを書くコストは、書いた瞬間には終わりません。そのルールは全セッションで読み込まれ続けますし、いつか陳腐化して嘘になるリスクも抱えます。さっきCoCから裏返した「増やしすぎない自制」が、AI向けルールでも同じ形で再発明されていたわけです。
 
 そしてこのフローは、禁止フックを持たないRubyのナイフに対する安全装置でもあります。AIがナイフで指を切ったら、その学びが振り返りに入り、繰り返されたらルールに昇格する。事前に全部を禁止するのではなく、切った傷から規約を育てていく。
-Doctrineにも、有能なプログラマーになる唯一の道は「ミスだらけの道」を恐れず通り抜けることだ、という一節があります。その道を歩きながら、同じ場所では二度転ばないための仕組みです。
+
+Doctrineにも、こんな一節があります。
+
+> The language and the framework should be patient tutors willing to help and guide anyone to experthood. While recognizing that the only reliable course there goes through the land of mistakes: Tools used wrong, a bit of blood, sweat, and perhaps even some tears. There simply is no other way.
+>
+> — [The Rails Doctrine "Provide sharp knives"](https://rubyonrails.org/doctrine#provide-sharp-knives)
+
+要するに、失敗せずに一人前になる道はないです。手を切るのは修行の一部で、避けようがない。だったらせめて、同じ切り方を二度しない仕組みを持っておく。「規約を増やす規約」はそのための装置です。
 
 ## まとめ
 
