@@ -60,12 +60,10 @@ Claudeが作ったCSVは本番データに直接書き込まれません。MCP�
 
 MCPサーバーの実行基盤はAmazon Bedrock AgentCore Runtimeにしました。簡単にいうと「MCPサーバーのコンテナを置くと、公開エンドポイントと認証とスケーリングを全部マネージドでやってくれるサービス」です。
 
-最初の案はこれではありませんでした。Claudeは外部SaaSなので、どこかにインターネットから届く入口が要ります。素直に考えると公開ALB + ECSで、実際に初期案は「既存の公開ALBに相乗りして、WAFでAnthropicのegress IPだけ許可する」でした。ただこれ、公開面が1つ増える上に、IP許可リストをAnthropic側の変更に追従させ続ける運用が永遠に残ります。JWTの検証ミドルウェアも自前実装です。認証コードは正しく書けて当たり前、間違えると社内システムの入口が開く類のコードなので、できれば書きたくない。
+ECSなどの自前のサーバーを立てるのではなくAgentCoreを選んだ理由です。
 
-AgentCoreはこの難所をほぼ全部引き受けてくれました。
-
-- 入口はAWS管理の`bedrock-agentcore.*.amazonaws.com`で、自前の公開面はゼロ。攻撃面の管理をアカウントの外に出せるので、セキュリティレビューでの説明もしやすい
-- inbound JWT authorizerにCognitoのdiscovery URLとclient_idを書くだけで、JWKS取得・署名検証・鍵ローテーション追従が入口で終わる。認証が「コード」ではなく「構成」になる
+- 入口はAWS管理の`bedrock-agentcore.*.amazonaws.com`で、自前の公開面はゼロ。攻撃面の管理をアカウントの外に出せる
+- inbound JWT authorizerにCognitoのdiscovery URLとclient_idを設定するだけで、JWKS取得・署名検証・鍵ローテーション追従が入口で終わる
 - VPCモードにするとRuntimeがprivate subnetにENIを生やすので、「入口はインターネット（認証済みのみ）、出口は閉域」という非対称な要件が設定ブロック1つで書ける
 - 課金は処理中のvCPU/メモリ秒のみ。運用者の散発的な利用ではECS常駐より構造的に安く、初期フェーズのコストが安かった
 
