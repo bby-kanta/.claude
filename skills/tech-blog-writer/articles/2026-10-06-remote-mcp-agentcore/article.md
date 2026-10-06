@@ -60,7 +60,7 @@ Claudeが作ったCSVは本番データに直接書き込まれません。MCP�
 
 MCPサーバーの実行基盤はAmazon Bedrock AgentCore Runtimeにしました。簡単にいうと「MCPサーバーのコンテナを置くと、公開エンドポイントと認証とスケーリングを全部マネージドでやってくれるサービス」です。
 
-ECSなどの自前のサーバーを立てるのではなくAgentCoreを選んだ理由です。
+ECSなどで自前のMCPサーバーを立てるのではなくAgentCoreを選んだ理由です。
 
 - 入口はAWS管理の`bedrock-agentcore.*.amazonaws.com`で、自前の公開面はゼロ。攻撃面の管理をアカウントの外に出せる
 - inbound JWT authorizerにCognitoのdiscovery URLとclient_idを設定するだけで、JWKS取得・署名検証・鍵ローテーション追従が入口で終わる
