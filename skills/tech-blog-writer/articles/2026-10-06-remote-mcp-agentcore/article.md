@@ -1,4 +1,4 @@
-# AgentCore RuntimeでリモートMCPサーバーを作り手動運用を効率化しました
+## はじめに
 
 こんにちは、AIに仕事を振ってもらう側に回ることにしました。たろう眼鏡です。
 
@@ -66,6 +66,38 @@ ECSなどで自前のMCPサーバーを立てるのではなくAgentCoreを選�
 - inbound JWT authorizerにCognitoのdiscovery URLとclient_idを設定するだけで、JWKS取得・署名検証・鍵ローテーション追従が入口で終わる
 - VPCモードにするとRuntimeがprivate subnetにENIを生やすので、「入口はインターネット（認証済みのみ）、出口は閉域」という非対称な要件が設定ブロック1つで書ける
 - 課金は処理中のvCPU/メモリ秒のみ。運用者の散発的な利用ではECS常駐より構造的に安く、初期フェーズのコストが安かった
+
+MCPサーバー本体はPython + [MCP公式SDK](https://github.com/modelcontextprotocol/python-sdk)に同梱のFastMCPで実装しました。AgentCoreのコンテナ規約は「`0.0.0.0:8000/mcp`でStreamable HTTPを待ち受けること」だけなので、これを満たすイメージをECRにpushすれば動きます。
+
+```python
+from mcp.server.fastmcp import Context, FastMCP
+
+mcp = FastMCP(
+    "retail-mcp",
+    host="0.0.0.0",       # AgentCoreのコンテナ規約: 0.0.0.0:8000/mcp
+    port=8000,
+    stateless_http=True,  # セッション管理はRuntime側が持つのでサーバーは状態レス
+)
+
+# フォールバック既定値は持たない（未設定なら起動時に落とし、環境をまたいだ誤送信を防ぐ）
+API_BASE_URL = os.environ["MCP_API_BASE_URL"]
+
+@mcp.tool()
+async def create_csv_upload_url(ctx: Context, label: str) -> dict:
+    """CSVをstagingバケットへ直接PUTするための署名付きURL（期限5分）を発行する。
+
+    labelは必ずlist_csv_labelsが返すlabelをそのまま渡すこと（推測で作らない。
+    未知のラベルはサーバーが400で拒否する）。CSV本文はこのツールを経由しない。
+    """
+    return await _call_rails(ctx, "POST", "/mcp/csv_uploads/upload_url", json_body={"label": label})
+```
+
+実装のポイントは4つです。
+
+- **サーバーはステートレス。** MCPのセッション管理はRuntime側がやってくれるので、`stateless_http=True`を宣言するだけ。セッションストアもsticky sessionも登場しません
+- **ツールの実体は転送だけ。** `_call_rails`は「受信したAuthorizationヘッダーをそのまま付けてRailsの`/mcp/*` APIを呼ぶ」薄いHTTPクライアントで、ビジネスロジックも権限判定も持ちません。全部Rails側の仕事です
+- **docstringがプロンプトの置き場。** ツールのdocstringはそのままツール仕様としてClaudeに渡ります。「先に`list_csv_labels`を呼んでヘッダー定義を確認すること」「labelを推測で作らないこと」といった使い方のガードはここに書いてあり、仮にClaudeが無視してもRails側が未知のラベルを400で拒否する二段構えです
+- **エラーは返す、トークンは残さない。** Railsの4xx/5xxはエラー本文ごとClaudeに返します（ヘッダー不足などをClaudeが自分で直して再試行できるので、これが地味に効きます）。一方CloudWatch Logsには、Authorizationの値とCSV本文を一切出力しません
 
 ### internal ALB + 専用ECS
 
