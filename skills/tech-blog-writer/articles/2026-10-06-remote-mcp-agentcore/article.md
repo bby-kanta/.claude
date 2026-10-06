@@ -22,15 +22,7 @@ ClaudeがMCP経由でフォーマットを自分で参照し、アップロー�
 
 経路の全体像はこうなりました。
 
-```mermaid
-graph LR
-    A[Claude<br>カスタムコネクタ] -->|OAuth| B[Cognito<br>+ Okta連携]
-    A -->|Bearer JWT| C[AgentCore Runtime<br>MCPサーバー]
-    C -->|VPC内 / JWT転送| D[internal ALB]
-    D --> E[mcp専用ECS<br>Rails]
-    E -->|SELECTのみ| F[(Aurora<br>リーダー)]
-    E -->|署名付きURL発行| G[(S3<br>ステージング)]
-```
+![リモートMCP基盤の全体アーキテクチャ](./images/remote-mcp-architecture.png)
 
 認証はCognito（Okta連携）、MCPサーバーの実行基盤はAmazon Bedrock AgentCore Runtime、その先はVPC内のinternal ALBを経由して専用ECS上のRailsに届きます。MCPサーバー自体はPython製の薄い転送層で、ビジネスロジックと権限管理は全てアプリサーバー側に寄せています。
 
@@ -62,27 +54,9 @@ Claudeが作ったCSVは本番データに直接書き込まれません。MCP�
 
 というわけで半ばやむを得ず、マネージドな認可サーバーとしてCognitoを挟みました。CognitoのUser PoolにOktaをIdPとして連携し、ユーザー管理・退職処理はOktaに一本化、Cognitoは「OAuthのトークン発行」に徹する構成です。Claudeのコネクタ認証のためだけに別のユーザー管理が増えることもなく、退職者のアカウントをOktaで止めればMCPへのアクセスも同時に止まります。
 
-トレードオフもあります。Okta連携でログインしたユーザーはCognitoのUser Poolにフェデレーテッドユーザーとして作られ、Okta側で権限を外してもUser Poolには残り続けるので、定期的な棚卸しは必要です。ただ、Oktaで権限がなくなれば新しい認証はどうせ通りませんし、トークンの有効期限も短く設定してあるので、手元に残ったトークンもすぐ失効します。User Poolに残るレコードはセキュリティホールではなくゴミ、棚卸しは穴塞ぎではなく掃除、という整理です。
+トレードオフもあります。Okta連携でログインしたユーザーはCognitoのUser Poolにフェデレーテッドユーザーとして作られ、Okta側で権限を外してもUser Poolには残り続けるので、定期的な棚卸しは必要です。ただ、Oktaで権限がなくなれば新しい認証は通りませんし、トークンの有効期限も短く設定してあるので、手元に残ったトークンもすぐ失効します。クリティカルな問題ではないと判断しました。
 
-もうひとつ、access tokenにemailクレームを付与するpre token generation Lambdaを置いています。Rails側がこのemailで社内のスタッフ情報と突合して権限管理につなげるためで、emailが取れない場合はトークン発行ごと失敗させる設計です。「認証は通ったが誰だかわからないトークン」を存在させないためです。
-
-このCognito × Claudeの組み合わせに、公式ドキュメントからは予見できない罠が2つありました。OAuthハンドシェイクだけが最後まで通らず、丸一日デバッグする羽目になりました。
-
-**罠①: トークン交換が毎回invalid_clientになる。** 認可コードの発行までは成功するのに、Claude側のトークン交換だけが失敗し続けました。原因はCognitoがメタデータの`token_endpoint_auth_methods_supported`にpublic client用の`none`を載せないこと。実際にはsecretなしの交換を受け付けるのに、メタデータに書いていないだけなんです。メタデータに忠実なClaudeは「secret認証が必須」と解釈し、secret未設定のまま空secretのBasic認証を送って`invalid_client`で弾かれていました。
-
-対応はアプリクライアントを`generate_secret = true`にして、コネクタ設定にsecretを入れること。OAuth 2.1の教科書的にはpublic client + PKCEにしたかったのですが、この組み合わせでは成立しませんでした。PKCEは引き続き併用されるのでセキュリティ的な後退はありません。
-
-**罠②: authorizeがinvalid_scopeで即死する。** secret問題を突破すると、今度は認可画面にすら到達しません。ブラウザのリダイレクト履歴を追うと、Claudeは`scope=openid+email+phone+profile`と、Cognitoのdiscoveryにある`scopes_supported`を全部要求していました。アプリクライアントに`phone`を許可していなかったため、Cognitoがリクエストごと拒否していたわけです（部分的に絞って発行はしてくれません）。許可scopeに`phone`を足して解決。Okta連携では電話番号属性を渡さないので、scopeがあっても中身は空で無害です。
-
-どちらも「CognitoもClaudeも単体では仕様の範囲内だが、組み合わせると詰む」タイプで、実測しないとわかりませんでした。
-
-:::details デバッグの工夫: 認可コードを捕獲する
-Claudeのcallbackは認可コードを即座に消費するので、中身が見えません。そこでCognitoのアプリクライアントにcallback URLとして`http://localhost:9999/cb`を一時追加しました（Cognitoはlocalhostに限りhttpを許可しています）。ブラウザが接続エラーページで止まり、アドレスバーにcodeとstateが完全な形で残ります。これを手動でトークン交換して「Cognito側は完全に健全」を証明し、疑いをClaude側の挙動に絞り込めました。
-
-あと、pre token generation Lambdaは「トークン発行の直前」に同期実行されるので、そのログの有無が切り分けの分岐点になります。ログなし＝クライアント認証で拒否、ログあり＝発行段階の問題、と二分できて便利でした。
-:::
-
-### AgentCore Runtime — 公開エンドポイントを自前で持たない
+### AgentCore Runtime
 
 MCPサーバーの実行基盤はAmazon Bedrock AgentCore Runtimeにしました。簡単にいうと「MCPサーバーのコンテナを置くと、公開エンドポイントと認証とスケーリングを全部マネージドでやってくれるサービス」です。
 
