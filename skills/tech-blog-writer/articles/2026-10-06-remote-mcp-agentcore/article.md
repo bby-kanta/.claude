@@ -24,7 +24,7 @@ ClaudeがMCP経由でフォーマットを自分で参照し、アップロー�
 
 経路の全体像はこうなりました。
 
-![](https://static.zenn.studio/user-upload/5fe99f3e7527-20261006.png)
+![](https://static.zenn.studio/user-upload/6a2e5c771b5f-20261007.png)
 
 認証はCognito（Okta連携）、MCPサーバーの実行基盤はAmazon Bedrock AgentCore Runtime、その先はVPC内のinternal ALBを経由して専用ECS上のRailsに届きます。MCPサーバー自体はPython製の薄い転送層で、ビジネスロジックと権限管理は全てアプリサーバー側に寄せています。
 
