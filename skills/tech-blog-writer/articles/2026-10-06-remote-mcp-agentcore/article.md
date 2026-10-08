@@ -123,6 +123,14 @@ CSVのアップロードは、署名付きURLを取得して、運用者が手�
 
 デプロイはCodePipeline + CodeBuildで、mainへのマージ時にMCPサーバーのコードが変わっていたら自動でビルド・ECR push・AgentCore Runtime更新まで走ります。構成自体は普通なので詳細は省きます。
 
+# Claude側のカスタムコネクタの設定
+Claudeのカスタムコネクタの設定も必要です。
+AgentCore RuntimeのURL・Cognitoで生成されたClient IDとClient secretを登録します。
+これでOktaで許可された社内のメンバーはコネクタから簡単にMCPに接続できるようになります。
+
+![](https://static.zenn.studio/user-upload/8d3ed2a6f79a-20261007.png)
+
+
 # 実際に使うとこうなる
 
 運用者から見える手順は「Claudeにコネクタを登録して、あとは話すだけ」です。
