@@ -21,7 +21,7 @@
 
 簡単にいうと、Devin Desktopでコーディングしている途中にDevin Botsを呼び出して、対象のコードを解説するHTMLを作らせます。できたHTMLはDevin Desktopの右タブにそのままシームレスに表示されるので、左でセッションで対話を進めながら右でコードの解説を読めます。
 
-![左にDevinのセッション、右にBotが作った解説HTMLを表示しているDevin Desktopの画面](./images/07-side-by-side.png)
+![左にDevinのセッション、右にBotが作った解説HTMLを表示しているDevin Desktopの画面](https://static.zenn.studio/user-upload/b1cc38ce9bfe-20261127.png)
 
 似たようなことはこれまでもやっていて、解説をPDFにしたり、AIが作ったHTMLをブラウザに貼り付けて開いたりセッション内でコードを解説させたりしていました。ただ、毎回ファイルを書き出してアプリを切り替えたり、導線が散らばるのが地味に面倒でした。今は作業中のDevin Desktop画面の右タブに即座に出せるので、自分にはこのシームレスな挙動が刺さりました。
 
@@ -47,7 +47,8 @@
 
 `handler.py`ができて、ローカル実行の結果まで返ってきました。
 
-![Devinがhandler.pyを作成し、6件のリクエストの実行結果を表で返している画面](./images/01-session.png)
+![Devinがhandler.pyを作成し、6件のリクエストの実行結果を表で返している画面](https://static.zenn.studio/user-upload/05c99fc66a93-20261127.png)
+
 
 ここまではいつものDevinです。
 
@@ -55,20 +56,22 @@
 
 入力欄の左下にある「+」を押すと、リポジトリやファイル、スキルと並んで「Bots」があります。
 
-![「+」メニューを開いた画面。リポジトリ、ファイル、スキル、Botsなどが並んでいる](./images/02-bots-menu.png)
+![「+」メニューを開いた画面。リポジトリ、ファイル、スキル、Botsなどが並んでいる](https://static.zenn.studio/user-upload/fdb00910fad3-20261127.png)
 
 ## 3. Botを指定して依頼する
 
 解説HTML用に作っておいたBotを選んで、「Botにhandler.py渡してHTMLを受け取って」と書いて送るだけです。
 
-![入力欄でBotを指定し、handler.pyを渡すよう依頼している画面](./images/03-call-bot.png)
+![入力欄でBotを指定し、handler.pyを渡すよう依頼している画面](https://static.zenn.studio/user-upload/fd5d4fcb6294-20261127.png)
 
 :::message
 **セッションのメニューからもBotに渡せます**
 
 「+」から呼ぶ以外に、サイドバーのセッション一覧からもBotに渡せます。セッションの「…」メニューの「その他」に「Bot に昇格」と「Bot に移動」があり、「Bot に移動」を開くと作成済みのBotが並びます。
 
-![セッションの「…」メニューから「その他」→「Bot に移動」を開き、作成済みのBotが一覧で表示されている画面](./images/03b-session-menu.png)
+![セッションの「…」メニューから「その他」→「Bot に移動」を開き、作成済みのBotが一覧で表示されている画面](https://static.zenn.studio/user-upload/209bcc7fc3cd-20261127.png)
+
+![](https://static.zenn.studio/user-upload/3ea319d799c7-20261127.png)
 
 ここで解説用のBotを選ぶと、セッションごとBotに渡せます。依頼文は書いていませんが、Botがセッションの中身から何をすべきか判断して、解説HTMLを作ってくれました。
 
@@ -81,21 +84,22 @@ Devinが`handler.py`の中身をBotに渡し、Botが解説HTMLを作ります�
 
 Botの成果物はBot側のチャットに届くので、HTMLはいったんそちらに添付されます。それをDevinが拾って、こちらのセッションに転送してくれました。
 
-![Botが作ったhandler_explained.htmlがセッションに添付されている画面](./images/04-html-returned.png)
+![Botが作ったhandler_explained.htmlがセッションに添付されている画面](https://static.zenn.studio/user-upload/df6f1d480918-20261127.png)
 
 ## 5. 右タブで開く
 
 添付されたHTMLを開くと、Devin Desktopの右タブに表示されます。左がセッション、右が解説です👇️
 
-![左にDevinのセッション、右にhandler_explained.htmlを表示している画面](./images/05-right-tab-overview.png)
+![左にDevinのセッション、右にhandler_explained.htmlを表示している画面](https://static.zenn.studio/user-upload/68853e19ff34-20261127.png)
 
 画面を切り替えずに、左で作業を続けながら右で読めます。ブラウザやエディタを行き来しなくていいのがシームレスです。
 
 # 解説HTMLの工夫
 
 ## 図で全体像を先に掴む
+![](https://static.zenn.studio/user-upload/32aa021c93d9-20261127.png)
 
-HTMLの冒頭には処理の流れと状態遷移の図があります（上のスクリーンショットの右側）。
+HTMLの冒頭には処理の流れと状態遷移の図があります。
 
 左が`event → lambda_handler → apply_request → borrow_book / return_book → 返り値`という処理の流れです。右は本1冊が`available`と`borrowed`の間をどう行き来するかの状態遷移図で、「借りられていない本を返す」「貸出中の本を借りる」が失敗して状態が変わらないことも描かれています。
 
@@ -104,20 +108,19 @@ HTMLの冒頭には処理の流れと状態遷移の図があります（上の�
 ## コードブロック風の見た目
 
 解説はすべてエディタっぽいコードブロックで、行番号とシンタックスハイライト付きです。各ブロックの左上には`L6-L12`のような行範囲のバッジがついているので、元のファイルのどこを読んでいるかが分かります。
+![](https://static.zenn.studio/user-upload/38fdbbbe44df-20261127.png)
 
-![borrow_bookとreturn_bookの解説。行範囲ごとの分岐説明と、2つの関数の比較表](./images/06-code-blocks.png)
-
-コードの下には行範囲ごとの説明が並びます。`borrow_book()`なら「L7-L8 蔵書にない」「L9-L10 貸出中」「L11-L12 状態を書き換えて成功」と、早期リターンの分岐が色分けされています。`return_book()`は`borrow_book()`とほぼ同じ構造なので、違いが比較表にまとまっていました。
+コードの下には行範囲ごとの説明が並びます。`borrow_book()`なら「L7-L8 蔵書にない」「L9-L10 貸出中」「L11-L12 状態を書き換えて成功」と、早期リターンの分岐が色分けされています。
 
 ## 呼び出し先のprivateメソッドを右横に並べる
 
 今回一番大切にしたのが、呼び出し先の実装を見やすくすることです。
 
-コードを読んでいて一番つらいのは、呼び出し先の実装を見に行くときです。下までスクロールするか別ファイルを開いて、読み終わったら元の場所を探して戻る。これを何度も繰り返すと、今どこを読んでいたのか分からなり心が折れ画面をそっと閉じます。
+コードを読んでいて一番つらいのは、呼び出し先の実装を見に行くときです。プライベートメソッドなら下までスクロールする。関数なら別ファイルを開いて、読み終わったら元の場所を探して戻る。これを何度も繰り返すと、今どこを読んでいたのか分からなくなり心が折れ画面をそっと閉じます。
 
 なので、ロジックの右横に呼び出し先の実装を並べるようにしました。
 
-![apply_requestの右横にborrow_bookの実装、lambda_handlerの右横にapply_requestの実装が並んでいる画面](./images/07-side-by-side.png)
+![](https://static.zenn.studio/user-upload/4c9003d9d6ea-20261127.png)
 
 `apply_request()`の右には`borrow_book()`と`return_book()`がタブで並んでいます。左のコードで波線のついた関数名をクリックすると、右のタブが切り替わります。`lambda_handler()`の右には`apply_request()`が出ています。
 
@@ -127,7 +130,7 @@ HTMLの冒頭には処理の流れと状態遷移の図があります（上の�
 
 最後に、サンプルイベント6件を順に処理したときの結果と、処理後の蔵書の状態が表になっています。
 
-![実行トレースの表。6件のリクエストごとにaction、結果、reason、月の図鑑と海の図鑑の状態が並ぶ](./images/08-trace.png)
+![](https://static.zenn.studio/user-upload/2feaf603daac-20261127.png)
 
 2件目で「貸出中です」、4件目で「借りられていない本です」になり、そのあいだ状態が変わっていないことが表で確認できます。コードを頭の中で実行しなくて済むので楽です。
 
@@ -135,7 +138,7 @@ HTMLの冒頭には処理の流れと状態遷移の図があります（上の�
 
 せっかくコードをAIに読ませたので、ついでに「気になった点」として最後に改善案を出させています。
 
-![「気になった点」セクション。borrow以外がすべて返却扱いになる点などが重要度つきで並んでいる](./images/09-suggestions.png)
+![](https://static.zenn.studio/user-upload/beba0fcc633a-20261127.png)
 
 今回は「`"borrow"`以外はすべて返却扱いになる」という指摘が出ました。`apply_request()`が`else`で受けているので、`"retrun"`のような打ち間違いも`return_book()`に流れます。ほかにも、キーがないと`KeyError`で落ちる点や、状態の文字列がベタ書きされている点が挙がっていました。
 
@@ -145,9 +148,9 @@ HTMLの冒頭には処理の流れと状態遷移の図があります（上の�
 
 # Botの設定
 
-Botに渡している指示は「デザインのルール」と「コードリーディング」の2つだけです。どちらもBotとやりとりしながら決めたもので、Botの設定画面の「メモリ」に2つに分かれて入っています。
+本Botに渡している指示は「デザインのルール」と「コードリーディング」の2つだけです。どちらもBotとやりとりしながら決めたもので、Botの設定画面の「メモリ」に2つに分かれて入っています。
 
-![本Botの「メモリ」設定画面。メモリが2件並んでいる](./images/12-memory.png)
+![](https://static.zenn.studio/user-upload/5314f9e43eb2-20261127.png)
 
 1つ目が役割と進め方で、2つ目がHTMLのデザインルールです。要点はこんな感じです。
 
@@ -217,12 +220,12 @@ Botの利用量は「Botとのチャット」と「Botが立ち上げたすべ�
 
 Botの設定画面の「使用量上限」では、請求サイクルごとのオンデマンド上限を決められます。今回のBotは「個別の使用量上限」にして、上限を$40にしました。
 
-![Botの「使用量上限」設定画面。使用量の割り当てが「個別の使用量上限」、オンデマンド上限が$40で、$10.98使用済みと表示されている](./images/10-usage-limit.png)
+![](https://static.zenn.studio/user-upload/5889f3bfd06f-20261127.png)
 
-今の請求サイクルでこのBotが使ったのは$10.98で、12月2日にリセットされることまで1画面で分かります。解説HTMLのように気軽に何度も呼ぶ用途だと、そのBotにいくらかかっているかを他の作業と分けて見られるのは助かります。
+今の請求サイクルでこのBotが使ったのは$11.97で、12月2日にリセットされることまで1画面で分かります。解説HTMLのように気軽に何度も呼ぶ用途だと、そのBotにいくらかかっているかを他の作業と分けて見られるのは助かります。
 
 :::message
-$10.98はBotを作るときの検証でぶん回しまくった分の合計です。この記事で紹介したセッションでは$1もかかっていません。
+$11.97はBotを作るときの検証でぶん回しまくった分の合計です。この記事で紹介したセッションでは$1もかかっていません。
 :::
 
 これはSkillsとの違いでもあると思っています。Slillsは作って配っても、実際に使われているのかが見えにくいです。Botは利用量がBotごとに残るので、ちゃんと使われているのか、実は今は誰も使っていないのかが数字で分かります。
@@ -238,7 +241,7 @@ Botの設定画面の「エージェントモード」では、2つのモデル�
 
 今回はオーケストレーターをDevin Fusion、セッションをSWE-2 Flash Medium (Preview)にしています。
 
-![Botの「エージェントモード」設定画面。オーケストレーターがFusion、セッションがSWE-2 Flash Medium (Preview)になっている](./images/11-agent-mode.png)
+![](https://static.zenn.studio/user-upload/9e0e1ba8a6af-20261127.png)
 
 Devin Fusionは計画やレビューを担うフロンティアモデルで、コードを書く時のみコストの低いモデルを組み合わせて動かすなどを柔軟に行えるCognitionの仕組みです（[Introducing Fusion in Devin Desktop & CLI](https://cognition.com/blog/local-fusion)）。SWE-2 FlashはCognitionが2026年11月4日に出したコーディング用モデルで、SWE-2の5分の1の価格、3倍の速度とされています（[Introducing SWE-2 Flash](https://cognition.com/blog/swe-2-flash)）。
 
