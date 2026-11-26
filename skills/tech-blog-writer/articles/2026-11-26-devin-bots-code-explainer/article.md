@@ -252,6 +252,20 @@ Devin Fusionは計画やレビューを担うフロンティアモデルで、�
 
 解説HTMLの作成はデザインルールに沿ってコードを読むだけなので、手を動かす側はSWE-2 Flashで十分でした。毎回フロンティアモデルで回すと気軽に呼べなくなるので、ここは意図的に軽いモデルを選んでいます。
 
+## Automationsで呼び出しも効率化できる
+
+ここまでは作業中のセッションから手でBotを呼んでいましたが、BotにはAutomationsも設定できます。Automationsは、GitHubやSlack、スケジュールなどのイベントをきっかけにDevinのセッションを自動で立ち上げる機能です（[Automations（Devin Docs）](https://docs.devin.ai/product-guides/automations)）。
+
+これを使って、PRに`code-explain`というラベルが貼られたら、そのPRのコード解説HTMLをBotが作るようにしてみました。Automationsの指示には、HTMLができたら作ったセッションのURLをPRにコメントするところまで書いています。
+
+![](https://static.zenn.studio/user-upload/250ba9d7d612-20261127.png)
+
+ラベルを貼ってしばらく待つと、PRにこんなコメントが付きました。
+
+![](https://static.zenn.studio/user-upload/7c1379a2634f-20261127.png)
+
+リンクを開けばセッションに添付された解説HTMLがそのまま見れます。Devin Desktopを開いていなくても、PRにラベルを貼るだけで、ブラウザ上で解説HTMLを閲覧できました。
+
 # 今後やりたいこと
 
 この記事では使っていませんが、Devin BotsはBot同士で連携できます。公式の例では、QA Botがバグを見つけたらDeveloper Botを呼んで直させる、という流れが紹介されています（[Devin Bots](https://devin.ai/bots)）。
