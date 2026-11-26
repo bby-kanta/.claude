@@ -88,7 +88,7 @@ Botの成果物はBot側のチャットに届くので、HTMLはいったんそ�
 
 ## 5. 右タブで開く
 
-添付されたHTMLを開くと、Devin Desktopの右タブに表示されます。左がセッション、右が解説です👇️
+添付されたHTMLをクリックすると、Devin Desktopの右タブに即座に表示されます。左がセッション、右が解説です👇️
 
 ![左にDevinのセッション、右にhandler_explained.htmlを表示している画面](https://static.zenn.studio/user-upload/68853e19ff34-20261127.png)
 
