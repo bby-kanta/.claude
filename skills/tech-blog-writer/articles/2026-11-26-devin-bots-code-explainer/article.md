@@ -35,7 +35,7 @@
 
 Botにはこんな指示をしてあります。
 
-![Botの設定画面の「一般」。指示欄にHTMLで解説して元のセッションに渡すこと、コードの変更は禁止、長考せず素早くセッションに渡すことが書かれている](images/00-bot-instructions.png)
+![](https://static.zenn.studio/user-upload/f6fe5ea87483-20261127.png)
 
 使い方の流れは以下の通りです。
 実際の作業のイメージが付くように、Devin Desktop画面全体のスクリーンショットも添付します。
@@ -252,7 +252,7 @@ Devin Fusionは計画やレビューを担うフロンティアモデルで、�
 
 解説HTMLの作成はデザインルールに沿ってコードを読むだけなので、手を動かす側はSWE-2 Flashで十分でした。毎回フロンティアモデルで回すと気軽に呼べなくなるので、ここは意図的に軽いモデルを選んでいます。
 
-## Automationsで呼び出しも効率化できる
+## AutomationsでBotの呼び出しも自動化できる
 
 ここまでは作業中のセッションから手でBotを呼んでいましたが、BotにはAutomationsも設定できます。Automationsは、GitHubやSlack、スケジュールなどのイベントをきっかけにDevinのセッションを自動で立ち上げる機能です（[Automations（Devin Docs）](https://docs.devin.ai/product-guides/automations)）。
 
@@ -260,7 +260,7 @@ Devin Fusionは計画やレビューを担うフロンティアモデルで、�
 
 ![](https://static.zenn.studio/user-upload/250ba9d7d612-20261127.png)
 
-ラベルを貼ってしばらく待つと、PRにこんなコメントが付きました。
+ラベルを貼って少し待つと、PRにこんなコメントが付きました。
 
 ![](https://static.zenn.studio/user-upload/7c1379a2634f-20261127.png)
 
