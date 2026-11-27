@@ -13,9 +13,8 @@
 # 前提
 
 1. 筆者は自律型AIエージェントはGrok BotとDevin Botsしか使ったことがないです。申し訳ないですが、ほかのBotの強みや弱みは良く知りません。
-2. あと筆者はDevinが大好きです。なのでDevinのポジショントークになっている可能性があります。
-3. Devin Botsが使いたくてしょうがなくて無理して使っている節があります。
-4. この記事はコード解説HTMLを作るTipsであり、Devin Botsの良さを紹介する記事でもあります。後半の「Devin Botsのいいところ」では、今回の使い方に留まらないDevin Bots全般の利点も書いています。
+2. 筆者はDevinが大好きです。なのでDevinのポジショントークになっている可能性があります。
+3. この記事はコード解説HTMLを作るTipsであり、Devin Botsの良さを紹介する記事でもあります。後半の「Devin Botsのいいところ」では、今回の使い方に留まらないDevin Bots全般の利点も書いています。
 
 他のAIエージェントでも本記事でやれることはきっとできるので、1つのアイデアとして参考にしてもらえればと思います。
 
@@ -25,7 +24,7 @@
 
 ![左にDevinのセッション、右にBotが作った解説HTMLを表示しているDevin Desktopの画面](https://static.zenn.studio/user-upload/b1cc38ce9bfe-20261127.png)
 
-似たようなことはこれまでもやっていて、解説をPDFにしたり、AIが作ったHTMLをブラウザに貼り付けて開いたりセッション内でコードを解説させたりしていました。ただ、毎回ファイルを書き出してアプリを切り替えたり、導線が散らばるのが地味に面倒でした。今は作業中のDevin Desktop画面の右タブに即座に出せるので、自分にはこのシームレスな挙動が刺さりました。
+似たようなことはこれまでもやっていて、解説をPDFにしたり、AIが作ったHTMLをブラウザに貼り付けて開いたりセッション内でコードを解説させたりしていました。ただ、毎回ファイルを書き出してアプリを切り替えたり、導線が散らばるのが面倒でした。今は作業中のDevin Desktop画面の右タブに即座に出せるので、自分にはこのシームレスな挙動が刺さりました。
 
 この記事で紹介するのは以下の2つです。
 
@@ -258,6 +257,8 @@ Devin Fusionは計画やレビューを担うフロンティアモデルで、�
 ここまでは作業中のセッションから手でBotを呼んでいましたが、BotにはAutomationsも設定できます。Automationsは、GitHubやSlack、スケジュールなどのイベントをきっかけにDevinのセッションを自動で立ち上げる機能です（[Automations（Devin Docs）](https://docs.devin.ai/product-guides/automations)）。
 
 これを使って、PRに`code-explain`というラベルが貼られたら、そのPRのコード解説HTMLをBotが作るようにしてみました。Automationsの指示には、HTMLができたら作ったセッションのURLをPRにコメントするところまで書いています。
+
+![](https://static.zenn.studio/user-upload/3ffa6c5a147e-20261127.png)
 
 ![](https://static.zenn.studio/user-upload/250ba9d7d612-20261127.png)
 
